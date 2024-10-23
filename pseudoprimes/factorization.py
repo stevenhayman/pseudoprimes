@@ -6,8 +6,10 @@ from typing import Any, Dict, List
 
 from pseudoprimes.trial_division import is_prime, factor
 
+
 class Factorization:
     """Class providing the ability to store the factorization of an integer."""
+
     def __init__(self, **kwargs) -> None:
         if 'value' in kwargs:
             self.__factors = factor(kwargs['value'])
@@ -44,12 +46,15 @@ class Factorization:
         for prime, exponent in self.__factors.items():
             value *= prime ** exponent
         return value
-    
+
+    def __lt__(self, other: Factorization) -> bool:
+        return int(self) < int(other)
+
     def __mul__(self, other: Factorization) -> Factorization:
         """Overloads the multiplication operator for two factorizations."""
         if not isinstance(other, Factorization):
             raise ValueError("Can only multiply with another Factorization")
-        
+
         factors = self.__factors.copy()
 
         for prime, exponent in other.factors().items():
@@ -57,12 +62,19 @@ class Factorization:
                 factors[prime] += exponent
             else:
                 factors[prime] = exponent
-        
+
         return Factorization(factors=factors)
 
     def divisors(self) -> List[Factorization]:
         """Returns a list of divisors of an integer"""
         return [divisor for divisor in DivisorsIterator(self)]
+
+    def divisors_count(self) -> int:
+        """Returns the number of divisors"""
+        product = 1
+        for _, exponent in self.__factors.items():
+            product *= (exponent + 1)
+        return product
 
     def __validate(self, factors: Dict[int, int]) -> None:
         for prime, exponent in factors.items():
@@ -75,8 +87,10 @@ class Factorization:
         sorted_factors = sorted(factors.items())
         return {prime: exponent for prime, exponent in sorted_factors if exponent > 0}
 
+
 class DivisorsIterator:
     """Class providing the ability to iterate through the divisors of a factored integer."""
+
     def __init__(self, factorization: Factorization) -> None:
         self.__primes = factorization.primes()
         self.__exponents = factorization.exponents()

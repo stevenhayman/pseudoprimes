@@ -7,21 +7,23 @@ from __future__ import annotations
 
 from typing import List, Optional
 
+
+def multiply_modulo(factors: List[int], modulus: int,) -> int:
+    """Calculates the product of the factors modulo the specified modulus."""
+    value = 1
+    for factor in factors:
+        value = (value * factor) % modulus
+    return value
+
+
 class ModularProduct:
     """A class representing a product of integers modulo a given modulus."""
+
     def __init__(self, modulus: int, factors: Optional[List[int]] = None) -> None:
         """Initializes a ModularProduct instance with a modulus and an optional list of factors."""
         self.__modulus = modulus
         self.__factors = factors or []
-        self.__value = ModularProduct.__calculate_value(modulus, factors)
-
-    @staticmethod
-    def __calculate_value(modulus: int, factors: List[int]) -> int:
-        """Calculates the product of the factors modulo the specified modulus."""
-        value = 1
-        for factor in factors:
-            value = (value * factor) % modulus
-        return value
+        self.__value = multiply_modulo(factors, modulus)
 
     def __mul__(self, arg: any) -> ModularProduct:
         """Multiplies the current ModularProduct instance with an integer

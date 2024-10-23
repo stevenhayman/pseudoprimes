@@ -14,7 +14,6 @@ def is_prime(n: int) -> bool:
     if n % 2 == 0:
         return False
 
-
     m: int = isqrt(n) + 1
     for d in range(3, m, 2):
         if n % d == 0:
