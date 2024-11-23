@@ -1,4 +1,9 @@
-"""Iterator for partitioning divisors of a factorization for parallel processing."""
+"""Iterator for partitioning divisors of a factorization for parallel processing.
+
+This module provides functionality to split the work of iterating through divisors
+across multiple processes. It partitions the divisors based on their prime factors
+to ensure an even distribution of work.
+"""
 from __future__ import annotations
 from typing import Iterator, List, Tuple
 
@@ -7,7 +12,12 @@ from pseudoprimes.lists import split_equally
 
 
 class PartitionedDivisorsIterator:
-    """Yields divisors of a factorization, partitioned for parallel processing."""
+    """Iterator that yields divisors from a specific partition of a factorization.
+    
+    This class splits the prime factors of a number into two groups:
+    1. Partition
+    2. Remaining
+    """
 
     def __init__(
         self,
@@ -58,7 +68,7 @@ class PartitionedDivisorsIterator:
         )
 
     def __get_partition_key_factorizations(self) -> List[Factorization]:
-        partition_keys_divisors = partition_keys_divisors = list(
+        partition_keys_divisors = list(
             DivisorsIterator(self.__partition_keys_factorization)
         )
 

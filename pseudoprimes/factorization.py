@@ -1,5 +1,9 @@
-"""Module providing a class for storing the factorization of an integer
-and a class for interating through the divisors of a factored integer."""
+"""Module for integer factorization and divisor enumeration.
+
+Provides two main classes:
+- Factorization: Represents integers through their prime factorizations
+- DivisorsIterator: Iterates through all divisors of a factored integer
+"""
 from __future__ import annotations
 
 from typing import Any, Dict, List
@@ -8,7 +12,15 @@ from pseudoprimes.trial_division import is_prime, factor
 
 
 class Factorization:
-    """Class providing the ability to store the factorization of an integer."""
+    """Represents an integer through its prime factorization.
+    
+    Stores factorizations as a dictionary of prime factors and their exponents.
+    Example: 12 = 2^2 * 3^1 is stored as {2: 2, 3: 1}
+    
+    Args:
+        value: An integer to be factored, or
+        factors: A dict mapping prime factors to exponents
+    """
 
     def __init__(self, **kwargs) -> None:
         if 'value' in kwargs:
@@ -19,20 +31,38 @@ class Factorization:
             self.__factors = self.__to_standard_form(factors)
 
     def factors(self) -> Dict[int, int]:
-        """Function returning the factors of an integer
-        in the form of a map from primes to exponents."""
+        """Get the prime factorization dictionary.
+        
+        Returns:
+            Dict mapping prime factors to exponents, sorted by prime value
+        """
         return self.__factors
 
     def primes(self) -> List[int]:
-        """Function returning the prime factors of an integer."""
+        """Get the list of prime factors.
+        
+        Returns:
+            List of prime factors in ascending order
+        """
         return list(self.__factors.keys())
 
     def exponents(self) -> List[int]:
-        """Function returning the exponents foreach prime factor of an integer."""
+        """Get the list of prime factor exponents.
+        
+        Returns:
+            List of exponents corresponding to each prime factor
+        """
         return list(self.__factors.values())
 
     def has_prime_divisor(self, n: int) -> bool:
-        """Returns True if the parameter is a prime factor of the integer."""
+        """Check if a number is a prime factor.
+        
+        Args:
+            n: The number to check
+            
+        Returns:
+            True if n is a prime factor in this factorization
+        """
         return n in self.__factors
 
     def __eq__(self, other: Any) -> bool:
@@ -66,11 +96,19 @@ class Factorization:
         return Factorization(factors=factors)
 
     def divisors(self) -> List[Factorization]:
-        """Returns a list of divisors of an integer"""
+        """Get all positive divisors.
+        
+        Returns:
+            List of all divisors as Factorization objects
+        """
         return [divisor for divisor in DivisorsIterator(self)]
 
     def divisors_count(self) -> int:
-        """Returns the number of divisors"""
+        """Calculate the total number of positive divisors.
+        
+        Returns:
+            The count of all positive divisors
+        """
         product = 1
         for _, exponent in self.__factors.items():
             product *= (exponent + 1)
@@ -87,9 +125,38 @@ class Factorization:
         sorted_factors = sorted(factors.items())
         return {prime: exponent for prime, exponent in sorted_factors if exponent > 0}
 
+def lcm(a: Factorization, b: Factorization) -> Factorization:
+    """Compute the least common multiple of two factored numbers.
+    
+    Args:
+        a: First factored number
+        b: Second factored number
+        
+    Returns:
+        The LCM represented as a Factorization
+    """
+    factors = {}
+
+    a_factors = a.factors()
+    b_factors = b.factors()
+
+    primes = set(a_factors.keys()).union(b_factors.keys())
+
+    for prime in primes:
+        exponent = max(a_factors.get(prime, 0), b_factors.get(prime, 0))
+        factors[prime] = exponent
+
+    return Factorization(factors=factors)
 
 class DivisorsIterator:
-    """Class providing the ability to iterate through the divisors of a factored integer."""
+    """Enables iteration through all positive divisors of a factored number.
+
+    Generates divisors by systematically incrementing exponents of prime factors
+    up to their maximum values in the original factorization.
+
+    Args:
+        factorization (Factorization): The factored number whose divisors to iterate through
+    """
 
     def __init__(self, factorization: Factorization) -> None:
         self.__primes = factorization.primes()
