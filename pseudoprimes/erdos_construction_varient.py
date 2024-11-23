@@ -16,10 +16,7 @@ def build_primes_set(factorization: Factorization, order: int) -> Set[int]:
         factorization: The base factorization to build from
         order: The order of the Carmichael number to construct"""
     limit = int_root(int(factorization), order)
-    divisors_iterator = map(
-        int,
-        _generate_divisors_less_than(factorization, limit)
-    )
+    divisors_iterator = _generate_divisors_less_than(factorization, limit)
     return _build_primes_set_for_divisors(
         factorization,
         order,
@@ -46,7 +43,7 @@ def build_primes_set_partition(
 def _build_primes_set_for_divisors(
     factorization: Factorization,
     order: int,
-    divisors: Iterable[int],
+    divisors: Iterable[Factorization],
 ) -> Set[int]:
     """Builds the set of valid primes from divisors."""
     value = int(factorization)
@@ -55,25 +52,14 @@ def _build_primes_set_for_divisors(
 
     for divisor in divisors:
         p = int(divisor) + 1
-        if _is_valid_prime(p, divisor, factorization, order, value):
+        if (
+            not factorization.has_prime_divisor(p)
+            and all(value % (p**r - 1) == 0 for r in range(1, order + 1))
+            and is_prime(p, divisor)
+        ):
             primes.add(p)
 
     return primes
-
-
-def _is_valid_prime(
-    p: int,
-    divisor: int,
-    factorization: Factorization,
-    order: int,
-    value: int
-) -> bool:
-    """Checks if a prime p is valid for Carmichael number construction."""
-    return (
-        not factorization.has_prime_divisor(p)
-        and all(value % (p**r - 1) == 0 for r in range(1, order + 1))
-        and is_prime(p, divisor)
-    )
 
 
 def _generate_divisors_less_than(
