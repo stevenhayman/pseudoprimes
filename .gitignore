@@ -1,3 +1,10 @@
+# Editor/agent local files (plans, settings, session data) -- kept out of VCS for now
+.claude/
+
+# Local CLI driver -- a personal convenience for exercising the library, kept out
+# of VCS. The README shows how to write an equivalent driver against the library.
+apps/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
