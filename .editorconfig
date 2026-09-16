@@ -1,0 +1,21 @@
+# Mechanical formatting for this repo. See AGENTS.md for conventions this
+# file cannot express (naming, ASCII-only comments).
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{hpp,cpp}]
+max_line_length = 100
+
+[*.py]
+indent_size = 4
+max_line_length = 100
+
+[*.md]
+trim_trailing_whitespace = false
