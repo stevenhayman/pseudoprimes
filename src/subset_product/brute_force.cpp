@@ -1,4 +1,4 @@
-#include "pseudoprime/subset_product.hpp"
+#include "pseudoprime/subset_product/brute_force.hpp"
 
 #include <cstddef>
 #include <generator>

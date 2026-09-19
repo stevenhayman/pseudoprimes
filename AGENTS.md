@@ -59,6 +59,23 @@ congruence, `>` for "is a supergroup of". Unicode math belongs in the Markdown f
   congruences of proven composites (like `is_carmichael`); they live outside `primality/` on
   purpose, are never `PrimalityTest`s, and nothing in `primality/` may call them.
 
+## File layout
+
+- Public headers live under `include/pseudoprime/` and sources under `src/`, at the same relative
+  path: `include/pseudoprime/<dir>/<name>.hpp` pairs with `src/<dir>/<name>.cpp`. Umbrella
+  headers, interface-only headers, and small inline types (`integer.hpp`, `modular_integer.hpp`)
+  have no `.cpp`.
+- A component split across several files gets a directory in both trees and a top-level umbrella
+  header, `include/pseudoprime/<dir>.hpp`, that includes only headers from that directory
+  (`primality.hpp`, `large_carmichael.hpp`, `prime_set_strategy.hpp`, `subset_product.hpp`).
+- Each `.cpp` includes its own header first.
+- A header used only by the library's own sources may stay in `src/` next to them
+  (`src/prime_set_strategy/detail.hpp`).
+- `LayeredSubsetProductSolver` is a `SubsetProductSolver` but is declared in
+  `large_carmichael/layered_solver.hpp`, because it depends on the subgroup-chain code.
+- The build files list every source explicitly. Add a new `.cpp` to `add_library` in
+  `CMakeLists.txt` and a new test file to `tests/CMakeLists.txt`.
+
 ## Formatting
 
 Indentation, line width, and whitespace are in `.editorconfig`. There is no `.clang-format`;
