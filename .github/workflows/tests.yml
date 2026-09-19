@@ -1,0 +1,30 @@
+name: tests
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    # This name is the status check to require in the main-branch ruleset.
+    name: Build and test
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      # std::generator needs GCC 14 or newer; libgmp-dev provides gmp and gmpxx.
+      - name: Install GCC 14 and GMP
+        run: sudo apt-get update && sudo apt-get install -y g++-14 libgmp-dev
+
+      # The linux-gcc preset sets CMAKE_CXX_COMPILER=g++ (GCC 13 on this image),
+      # so override it here.
+      - name: Configure
+        run: cmake --preset linux-gcc -DCMAKE_CXX_COMPILER=g++-14
+
+      - name: Build
+        run: cmake --build --preset linux-gcc --parallel
+
+      - name: Test
+        run: ctest --preset linux-gcc

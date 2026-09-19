@@ -80,4 +80,7 @@ also defines `linux-gcc` and `macos-clang` presets.
 
 - `main` is protected: direct pushes, force-pushes, and deletion are blocked.
 - Work on a branch and bring changes to `main` through a pull request.
+- A pull request can merge only after the `Build and test` check passes
+  (`.github/workflows/tests.yml`). CI builds on Linux with the `linux-gcc` preset and GCC 14,
+  not with the MinGW toolchain used for local development.
 - The repository owner reviews and merges every pull request. Do not merge one yourself.
