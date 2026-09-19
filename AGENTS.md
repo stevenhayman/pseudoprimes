@@ -75,3 +75,9 @@ ctest --test-dir build/mingw --output-on-failure
 Configure with `-DPP_BUILD_TESTS=OFF` to skip tests (and the GoogleTest fetch). This repo
 develops on Windows with the MSYS2 MinGW64 toolchain (GMP from pacman); `CMakePresets.json`
 also defines `linux-gcc` and `macos-clang` presets.
+
+## Git workflow
+
+- `main` is protected: direct pushes, force-pushes, and deletion are blocked.
+- Work on a branch and bring changes to `main` through a pull request.
+- The repository owner reviews and merges every pull request. Do not merge one yourself.
