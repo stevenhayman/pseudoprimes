@@ -1,4 +1,4 @@
-#include "pseudoprime/prime_set_strategy.hpp"
+#include "pseudoprime/prime_set_strategy/sieve.hpp"
 
 #include <cstdint>
 #include <optional>

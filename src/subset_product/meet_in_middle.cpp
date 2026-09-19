@@ -1,4 +1,4 @@
-#include "pseudoprime/subset_product.hpp"
+#include "pseudoprime/subset_product/meet_in_middle.hpp"
 
 #include <cstdint>
 #include <generator>
